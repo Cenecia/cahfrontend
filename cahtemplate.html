@@ -10,8 +10,10 @@
     <link rel="stylesheet" href="css/style.css" />
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP&display=swap" rel="stylesheet">
     <script src="https://kit.fontawesome.com/38e9318183.js" crossorigin="anonymous"></script>
-    
-    <title>Definitely Not CAH</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.3.2/dist/confetti.browser.min.js"></script>
+
+    <link rel="icon" type="image/png" href="/img/dencah.png" />
+    <title>DeNCAH</title>
   </head>
   <body>
       <div class="container-fluid">
@@ -31,8 +33,8 @@
         <div class="row d-none" id="mobileInfoRow">
             <div class="col">
                 <div class="card mt-4" style="width: 100%;">
-                    <div class="card-body">
-                        <h5 class="card-title"><strong>Definitely Not CAH</strong></h5>
+                    <div class="card-body main-card">
+                        <h5 class="card-title"><strong>DeNCAH</strong></h5>
                         <h6 class="card-subtitle mb-2 text-muted gameIDtag">Thanks for being a tester!</h6>
                         <div class="input-group d-none gameIDgroup">
                             <input type="text" id="gameIDlinkMobile" class="form-control gameIDlink" readonly/>
@@ -46,10 +48,14 @@
                                 <p id="namerow"></p>
                             </div>
                         </div>
-                        <div class="row d-none" id="gameDetails">
-                            <div class="col-12">
-                                <p class="whiteCardCount"></p>
-                                <p class="blackCardCount"></p>
+                        <div class="row" id="gameDetails">
+                            <div class="col-6">
+                                <a href="./cardlist.html" target="_blank">Card List</a><br/>
+                                <a href="https://discord.gg/JPH7WUCVEc" target="_blank">Discord</a>
+                            </div>
+                            <div class="col-6">
+                                <div class="whiteCardCount float-left mr-2"></div>
+                                <div class="blackCardCount float-left mr-2"></div>
                             </div>
                         </div>
                     </div>
@@ -61,16 +67,16 @@
                 <div class="row">
                     <div class="col-12" id="blackCardHolder">
                         <div class="mb-4 mt-4 float-right" id="blackCard">
-                            <div class="card text-white bg-dark playerCard"><div class="card-body"><p class="card-text">Welcome to Definitely Not CAH!</p></div></div>
+                            <div class="card text-white bg-dark playerCard border border-light"><div class="card-body"><p class="card-text">Welcome to DeNCAH!</p></div></div>
                         </div>
                     </div>
                 </div>
                 <div class="row" id="infoRow">
                     <div class="col">
                         <div class="card mt-4" style="width: 100%;">
-                            <div class="card-body">
+                            <div class="card-body main-card">
                                 <button id="toggleFS" class="float-right btn btn-secondary"><i class="fas fa-expand-alt"></i></button>
-                                <h5 class="card-title"><strong>Definitely Not CAH</strong> v0.1.43</h5>
+                                <h5 class="card-title"><strong>DeNCAH</strong></h5>
                                 <h6 id="gameIDtag" class="card-subtitle mb-2 text-muted gameIDtag">Thanks for being a tester!</h6>
                                 <div class="input-group d-none gameIDgroup">
                                     <input type="text" id="gameIDlink" class="form-control gameIDlink" readonly/>
@@ -85,11 +91,31 @@
                                     </div>
                                 </div>
                                 <div class="row" id="gameDetails">
-                                    <div class="col-12">
-                                        <p class="whiteCardCount"></p>
-                                        <p class="blackCardCount"></p>
+                                    <div class="col-6">
+                                        <a href="./cardlist.html" target="_blank">Card List</a><br/>
+                                        <a href="https://discord.gg/JPH7WUCVEc" target="_blank">Discord</a>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="whiteCardCount float-left mr-2"></div>
+                                        <div class="blackCardCount float-left mr-2"></div>
                                     </div>
                                 </div>
+                                <hr/>
+                                <div class="row" id="connectionInfo">
+                                    <div class="col">
+                                        <div>
+                                            <div class="d-lg-inline text-muted">
+                                                <span id="connectionText"></span>
+                                            </div>
+                                            <div class="float-right">
+                                                <i id="conn_icon_link" class="fas fa-smile d-none"></i>
+                                                <i id="conn_icon_offline" class="fas fa-sad-tear d-none"></i>
+                                                <i id="conn_icon_error" class="fas fa-skull d-none"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr/>
                                 <div class="row">
                                     <div class="col-12">
                                         <button class="btn btn-primary btn-block d-none nextRound" id="nextRound"><i class="fas fa-angle-double-right"></i> Next Round <i class="fas fa-angle-double-right"></i></button>
@@ -111,15 +137,15 @@
                 </div>
                 <div class="row" id="playerRow">
                     <div class="col">
-                        <hr/>
+                        <hr class="white-hr"/>
                         <h4>Players</h4>
-                        <ul class="list-group list-group-flush" id="playerList">
+                        <ul class="list-group list-group-flush rounded" id="playerList">
                         </ul>
                     </div>
                 </div>
             </div>
             <div class="col-lg-9 col-md-8" id="splash">
-                <h1 style="max-width: 10rem; margin: auto;">DENCAH</h1>
+                <h1 style="max-width: 11rem; margin: auto;">DeNCAH</h1>
                 <div class="card mt-4 p-2 text-white bg-secondary" id="nameForm" style="max-width: 36rem; margin: auto;">
                     <div class="card-body">
                         <div class="col-12">
@@ -132,6 +158,8 @@
                             <button class="btn btn-primary mt-2 btn-block" id="nameButton">Set Name</button>
                         </div>
                     </div>
+                </div>
+                <div id="nameError" class="alert alert-warning mt-2 d-none" role="alert" style="max-width: 36rem; margin: auto;">
                 </div>
                 <div class="card mt-4 p-2 text-white bg-secondary d-none" id="continueGameForm" style="max-width: 36rem; margin: auto;">
                     <div class="col-12">
@@ -156,6 +184,13 @@
                   
                       <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#newGameForm">
                         <div class="card-body">
+                            <div class="row">
+                                <label for="game_name">Name of Game:</label>
+                            </div>
+                            <div class="row">
+                                <input type="text" class="form-control" id="game_name" />
+                            </div>
+                            <hr/>
                             <div id="sets" class="col-12 accordion">
                                 <button class="btn btn-link text-light btn-block collapsed" type="button" data-toggle="collapse" data-target="#options" aria-expanded="false" aria-controls="options">
                                     <h3>Choose Sets <i class="fas fa-caret-down"></i></h3>
@@ -213,7 +248,7 @@
                             </div>
                             <hr/>
                             <div class="col-12">
-                                <button class="btn btn-primary btn-block mt-2 mb-2" id="newGame">Start it up!</button>
+                                <button class="btn btn-primary btn-block mt-2 mb-2" id="newGame" disabled>I like tacos</button>
                             </div>
                         </div>
                       </div>
@@ -228,11 +263,11 @@
                       </div>
                       <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#newGameForm">
                         <div class="card-body">
-                            <div class="col-12">
-                                Paste the game ID below. If you clicked a link this should be filled in for you!
+                            <div class="col-12" id="joinGameText">
+
                             </div>
                             <div class="col-12">
-                                <input type="text" class="form-control" id="gameID" />
+                                <input type="hidden" class="form-control" id="gameID" />
                             </div>
                             <div class="col-12">
                                 <button class="btn btn-primary btn-block mt-2" id="joinGame">Join Game</button>
@@ -245,8 +280,26 @@
             <div class="col-lg-9 col-md-8 d-none" id="game">
                 <div class="row" id="gameBoard">
                 </div>
-                <hr/>
-                <span class="badge badge-light border" style="position: relative; bottom: 40px;"><h5>Your Hand</h5></span>
+                <hr class="white-hr"/>
+                <span class="badge badge-dark border" style="position: relative; bottom: 35px; padding-top: 5px;"><h5>Your Hand</h5></span>
+                <button id="mulliganButton" type="button" class="btn btn-warning rounded-circle float-right d-none" style="padding: 15px 18px 15px 18px; border: 2px solid #dee2e6;" data-toggle="modal" data-target="#mulliganModal"><i class="fas fa-trash fa-lg"></i></button>
+                <div class="modal fade" id="mulliganModal" tabindex="-1" aria-labelledby="mulliganModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            Do your cards suck? I hear ya. You can throw them all in the trash and get brand new ones at the start of the next round.
+                            <br/><strong>You can only do this once per game!</strong>
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-link" data-dismiss="modal">Nah</button>
+                        <button type="button" id="mulliganConfirm" class="btn btn-primary">DO IT</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col">
                         <div class="row" id="whiteHand">
@@ -287,17 +340,111 @@
                 <p>THIS GUY! I know right? What do you want to do, boss?</p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Nevermind</button>
+                <button type="button" class="btn btn-link" data-dismiss="modal">Nevermind</button>
                 <button id="kickButton" type="button" class="btn btn-danger" data-id="">Kick</button>
             </div>
             </div>
         </div>
+      </div>
+      <!-- Modal -->
+      <div class="modal fade" id="blankCardModal" tabindex="-1" role="dialog" aria-labelledby="blankCardModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="blankCardModalLabel">Blank Card</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+                <p class="lead">What do you want the card to say?</p>
+                <input type="hidden" name="blankCardID" id="blankCardID" />
+                <textarea name="blankCard" id="blankCard" cols="30" rows="10" class="form-control"></textarea>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-link" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="queueCustomText()">Save changes</button>
+            </div>
+        </div>
+        </div>
+      </div>
+      <div id="gotKicked" class="modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title">Kicked</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <p><strong>You got kicked!</strong></p>
+                      <p>You either have shitty Internet or shitty friends. Bummer.</p>
+                  </div>
+                  <div class="modal-footer">
+                      <button id="kickedSucksButton" type="button" class="btn btn-secondary" data-dismiss="modal">This Sucks</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="errorbox" class="modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title">Error</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <p>Everything is messed up, it seems. Might want to talk to the hack that wrote this.</p>
+                      <p>The server reported an error:</p>
+                      <div id="errortext"></div>
+                  </div>
+                  <div class="modal-footer">
+                      <button id="errorSucksButton" type="button" class="btn btn-secondary" data-dismiss="modal">This Sucks</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="infobox" class="modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title">Look...</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+                  <div class="modal-body">
+                      <div id="infotext"></div>
+                  </div>
+                  <div class="modal-footer">
+                      <button id="infoWhateverButton" type="button" class="btn btn-secondary" data-dismiss="modal">Whatever</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div id="connectionbox" class="modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" >
+          <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                  <div class="modal-header">
+                      <h5 class="modal-title">Reconnecting . . . <i class='fas fa-spinner fa-spin'></i></h5>
+                  </div>
+                  <div class="modal-body">
+                      <p>Network's busted.</p>
+                      <p>Either the server is having difficulties or your overpriced Internet service sucks. Or both.</p>
+                  </div>
+                  <div class="modal-footer">
+                  </div>
+              </div>
+          </div>
       </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-    <script src="js/game.js"></script>
+    <script src="js/game.js" type="module"></script>
   </body>
 </html>
