@@ -1,7 +1,7 @@
 //set the base url for the various endpoints
 //all API calls will start with this URL, e.g., `${CONFIG_BASEURL}/v1/games/getGame`
-//https://dencah-deviler151532041.codeanyapp.com
-const CONFIG_BASEURL = "https://dencah-deviler151532041.codeanyapp.com";
+//https://dencah-deviler151532041.codeanyapp.com/v1/games/getAllSets
+const CONFIG_BASEURL = "http://localhost:3000";
 
 $(document).ready(function(){
     try {
@@ -204,6 +204,7 @@ $("#newGame").on('click', function(){
                     setGameID(result.data.gameID);
                     addToConsole("Your player ID: "+result.data.players[0]._id);
                     setPlayerID(result.data.players[0]._id);
+                    setPlayerToken(result.data.token)
                     updatePlayers(result.data.players, null);
                     $(".gameIDtag").each(function (){
                         $(this).html("Game Link:");
@@ -274,12 +275,14 @@ $("#joinGame").on('click', function(){
             gameID: gameID
         },
         success: function( result ) {
+            console.log(result.data.players)
             $("#whiteHand").html("");
             $("#gameBoard").html("");
             addToConsole("Joined game ID: "+result.data.gameID);
             setGameID(result.data.gameID);
             addToConsole("player ID: "+result.data.players[result.data.players.length-1]._id);
             setPlayerID(result.data.players[result.data.players.length-1]._id);
+            setPlayerToken(result.data.token)
             updatePlayers(result.data.players, null);
             localStorage.removeItem("round");
             $(".gameIDtag").each(function (){
@@ -761,6 +764,10 @@ function getPlayerID(){
     return localStorage.getItem("cahplayerid");
 }
 
+function getPlayerToken(){
+    return localStorage.getItem("cahplayertoken");
+}
+
 function getMulligans(){
     return localStorage.getItem("cahmulligans");
 }
@@ -783,6 +790,10 @@ function setGameID(gameID){
 
 function setPlayerID(playerID){
     localStorage.setItem("cahplayerid", playerID);
+}
+
+function setPlayerToken(playerToken){
+    localStorage.setItem("cahplayertoken", playerToken);
 }
 
 function setMulligans(mulligans){
@@ -830,6 +841,7 @@ function getCzarCard(){
 function clearData()
 {
     localStorage.removeItem("cahplayerid");
+    localStorage.removeItem("cahplayertoken");
     localStorage.removeItem("cahmulligans");
     localStorage.removeItem("cahgameid");
     localStorage.removeItem("cahround");
