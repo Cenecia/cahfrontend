@@ -33,6 +33,7 @@ $(document).ready(function(){
         $("#nameError").removeClass("d-none");
         $("#nameError").html("<i class='fas fa-plug'></i> Looks like the server is down... The game might not work.");
     }
+
     var gameID = getGameID();
     if(!gameID || getGameOver()){
         clearData();
