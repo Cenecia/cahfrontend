@@ -2,7 +2,7 @@
 //all API calls will start with this URL, e.g., `${CONFIG_BASEURL}/v1/games/getGame`
 //https://dencah-deviler151532041.codeanyapp.com
 //http://localhost:3000
-const CONFIG_BASEURL = "http://localhost:3000";
+const CONFIG_BASEURL = "https://dencah-deviler151532041.codeanyapp.com";
 
 $(document).ready(function(){
     try {
@@ -186,6 +186,7 @@ $("#newGame").on('click', function(){
         var score_limit = $("#score_limit").val();
         var game_name = $("#game_name").val();
         var hand_size = $("#hand_size").val();
+        var player_limit = $("#player_limit").val();
         $("#whiteHand").html("");
         var playerName = localStorage.getItem("cahplayername");
         if(playerName.length == 0){
@@ -200,7 +201,8 @@ $("#newGame").on('click', function(){
                     time_limit: time_limit,
                     score_limit: score_limit,
                     name: game_name,
-                    handSize: hand_size
+                    handSize: hand_size,
+                    playerLimit: player_limit
                 },
                 success: function( result ) {
                     setGameID(result.data.gameID);
