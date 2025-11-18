@@ -41,7 +41,7 @@
     <script>
       $(document).ready(function(){
         $.ajax({
-          url: "https://dencah-deviler151532041.codeanyapp.com/v1/games/getAllCards",
+          url: "https://api.dencah.xyz/games/getAllCards",
           method: "GET",
           success: function( result ) {
             result.data.whiteCardDeck.sort(compare);
