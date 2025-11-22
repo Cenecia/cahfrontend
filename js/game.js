@@ -2,7 +2,7 @@
 //all API calls will start with this URL, e.g., `${CONFIG_BASEURL}/games/getGame`
 //https://dencah-deviler151532041.codeanyapp.com
 //http://localhost:3000
-const CONFIG_BASEURL = "https://api.dencah.xyz";
+const CONFIG_BASEURL = "http://localhost:3000";
 
 $(document).ready(function(){
     try {
