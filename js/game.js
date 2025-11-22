@@ -1,19 +1,19 @@
 //set the base url for the various endpoints
-//all API calls will start with this URL, e.g., `${CONFIG_BASEURL}/v1/games/getGame`
+//all API calls will start with this URL, e.g., `${CONFIG_BASEURL}/games/getGame`
 //https://dencah-deviler151532041.codeanyapp.com
 //http://localhost:3000
-const CONFIG_BASEURL = "https://dencah-deviler151532041.codeanyapp.com";
+const CONFIG_BASEURL = "https://api.dencah.xyz";
 
 $(document).ready(function(){
     try {
         $.ajax({
-            url: `${CONFIG_BASEURL}/v1/games/getAllSets`,
+            url: `${CONFIG_BASEURL}/games/getAllSets`,
             method: "GET",
             data: {
                 //gameID: gameID
             },
             success: function( result ) {
-                var sets = result.data;
+                var sets = result;
                 sets.forEach(function(set){
                     $("#options").append(`
                         <div class="custom-control custom-switch">
@@ -54,13 +54,13 @@ $(document).ready(function(){
         $("#collapseTwo").addClass("show");
         $("#gameID").val(vars.id);
         $.ajax({
-            url: `${CONFIG_BASEURL}/v1/games/getGame`,
+            url: `${CONFIG_BASEURL}/games/getGame`,
             method: "POST",
             data: {
                 gameID: vars.id
             },
             success: function( result ) {
-                $("#joinGameText").html("You've been invited to a game called "+result.data.name+". Lucky you!");
+                $("#joinGameText").html("You've been invited to a game called "+result.name+". Lucky you!");
             }
         });
     }
@@ -100,14 +100,14 @@ setInterval(function(){
         $("#gameDetails").removeClass("d-none");
         if(!getRound()){
             $.ajax({
-                url: `${CONFIG_BASEURL}/v1/games/getGame`,
+                url: `${CONFIG_BASEURL}/games/getGame`,
                 method: "POST",
                 data: {
                     gameID: gameID
                 },
                 success: function( result ) {
-                    updatePlayers(result.data.players, null);
-                    if(result.data.rounds.length > 0){
+                    updatePlayers(result.players, null);
+                    if(result.rounds.length > 0){
                         getLatestRound(gameID);
                     }
                 }
@@ -193,7 +193,7 @@ $("#newGame").on('click', function(){
             addToConsole("Player Name is required.");
         } else {
             $.ajax({
-                url: `${CONFIG_BASEURL}/v1/games/new`,
+                url: `${CONFIG_BASEURL}/games/new`,
                 method: "POST",
                 data: {
                     player: playerName,
@@ -205,14 +205,14 @@ $("#newGame").on('click', function(){
                     playerLimit: player_limit
                 },
                 success: function( result ) {
-                    setGameID(result.data.gameID);
-                    setPlayerID(result.data.playerID);
-                    setGUID(result.data.guid);
-                    updatePlayers(result.data.players, null);
+                    setGameID(result.gameID);
+                    setPlayerID(result.playerID);
+                    setGUID(result.guid);
+                    updatePlayers(result.players, null);
                     $(".gameIDtag").each(function (){
                         $(this).html("Game Link:");
                         $(".gameIDlink").each(function (){
-                            $(this).val(window.location.href+"?id="+result.data.gameID);
+                            $(this).val(window.location.href+"?id="+result.gameID);
                         });
                         $(".gameIDgroup").removeClass("d-none");
                     });
@@ -229,7 +229,7 @@ $("#newGame").on('click', function(){
                                 </div>
                             </div>
                         </div>`);
-                    setOwnerID(result.data.owner);
+                    setOwnerID(result.owner);
                 }
             });
         }
@@ -271,7 +271,7 @@ $("#joinGame").on('click', function(){
     var playerName = localStorage.getItem("cahplayername");
     var gameID = $("#gameID").val().trim();
     $.ajax({
-        url: `${CONFIG_BASEURL}/v1/games/join`,
+        url: `${CONFIG_BASEURL}/games/join`,
         method: "POST",
         data: {
             player: playerName,
@@ -280,10 +280,10 @@ $("#joinGame").on('click', function(){
         success: function( result ) {
             $("#whiteHand").html("");
             $("#gameBoard").html("");
-            setGameID(result.data.gameID);
-            setPlayerID(result.data.playerID);
-            setGUID(result.data.guid);
-            updatePlayers(result.data.players, null);
+            setGameID(result.gameID);
+            setPlayerID(result.playerID);
+            setGUID(result.guid);
+            updatePlayers(result.players, null);
             localStorage.removeItem("round");
             $(".gameIDtag").each(function (){
                 $(this).html("Game Link:");
@@ -293,11 +293,11 @@ $("#joinGame").on('click', function(){
                 */
                 if(window.location.href.indexOf("?") > 0){
                     $(".gameIDlink").each(function () {
-                        $(this).val(window.location.href.substr(0,window.location.href.indexOf("?"))+"?id="+result.data.gameID);
+                        $(this).val(window.location.href.substr(0,window.location.href.indexOf("?"))+"?id="+result.gameID);
                     });
                 } else {
                     $(".gameIDlink").each(function () {
-                        $(this).val(window.location.href+"?id="+result.data.gameID);
+                        $(this).val(window.location.href+"?id="+result.gameID);
                     });
                 }
                 $(".gameIDgroup").removeClass("d-none");
@@ -312,7 +312,7 @@ $("#joinGame").on('click', function(){
                         </div>
                     </div>
                 </div>`);
-            setOwnerID(result.data.owner);
+            setOwnerID(result.owner);
         }
     });
 });
@@ -320,13 +320,13 @@ $("#joinGame").on('click', function(){
 $(".nextRound").on('click', function(){
     var gameID = getGameID();
     $.ajax({
-        url: `${CONFIG_BASEURL}/v1/games/startRound`,
+        url: `${CONFIG_BASEURL}/games/startRound`,
         method: "POST",
         data: {
             gameID: gameID
         },
         success: function( result ) {
-            doGameUpdate(result.data);
+            doGameUpdate(result);
             $("#nextRound").html("<i class='fas fa-angle-double-right'></i> Next Round <i class='fas fa-angle-double-right'></i>");
             $("#nextRound").addClass("d-none");
             $("#mobileNextRound").addClass("d-none");
@@ -341,7 +341,7 @@ $("#mulliganConfirm").on('click', function(){
     var guid = getGuid();
 
     $.ajax({
-        url: `${CONFIG_BASEURL}/v1/games/mulligan`,
+        url: `${CONFIG_BASEURL}/games/mulligan`,
         method: "POST",
         data: {
             playerID: playerID,
@@ -349,12 +349,12 @@ $("#mulliganConfirm").on('click', function(){
             guid: guid
         },
         success: function( result ) {
-            console.log(result.data);
-            if(result.data.mulligans == 0){
+            console.log(result);
+            if(result.mulligans == 0){
                 console.log("should remove?");
                 $("#mulliganButton").addClass('d-none');
             } else {
-                console.log("wrong mulligans = "+result.data.mulligans);
+                console.log("wrong mulligans = "+result.mulligans);
             }
             $('#mulliganModal').modal('hide');
             getHand();
@@ -379,7 +379,7 @@ $("#kickButton").on('click', function(e){
     var playerID = $(this).attr('data-id');
     var gameID = getGameID();
     $.ajax({
-        url: `${CONFIG_BASEURL}/v1/games/removePlayer`,
+        url: `${CONFIG_BASEURL}/games/removePlayer`,
         method: "POST",
         data: {
             gameID: gameID,
@@ -471,7 +471,7 @@ function submitWhiteCards(){
     var guid = getGuid();
     if(localRound.czar != playerID){
         $.ajax({
-            url: `${CONFIG_BASEURL}/v1/games/submitWhiteCard`,
+            url: `${CONFIG_BASEURL}/games/submitWhiteCard`,
             method: "POST",
             data: {
                 roundID: roundID,
@@ -480,7 +480,7 @@ function submitWhiteCards(){
                 guid: guid
             },
             success: function( result ) {
-                doGameUpdate(result.data);
+                doGameUpdate(result);
                 getHand();
             }
         });
@@ -488,7 +488,7 @@ function submitWhiteCards(){
         var czarCard = getCzarCard();
         if(czarCard){
             $.ajax({
-                url: `${CONFIG_BASEURL}/v1/games/selectCandidateCard`,
+                url: `${CONFIG_BASEURL}/games/selectCandidateCard`,
                 method: "POST",
                 data: {
                     roundID: localRound._id,
@@ -497,7 +497,7 @@ function submitWhiteCards(){
                     guid: guid
                 },
                 success: function( result ) {
-                    updatePlayers(result.data.players, result.data.czar);
+                    updatePlayers(result.players, result.czar);
                     $("#czarBox").addClass("d-none");
                     $("#mobileCzarBox").addClass("d-none");
                     $("#nextRound").removeClass("d-none");
@@ -513,7 +513,7 @@ function getHand(){
     var playerID = getPlayerID();
     var guid = getGuid();
     $.ajax({
-        url: `${CONFIG_BASEURL}/v1/games/getHand`,
+        url: `${CONFIG_BASEURL}/games/getHand`,
         method: "POST",
         data: {
             playerID: playerID,
@@ -522,7 +522,7 @@ function getHand(){
         success: function( result ) {
             $("#whiteHand").html("");
             var whiteHand = "";
-            result.data.hand.forEach(function(card){
+            result.hand.forEach(function(card){
                 whiteHand = whiteHand + 
                     `<div class="mb-1 mt-1 mr-2 float-left wc_wrapper">
                         <div id="wc${card._id}" class="playerCard card bg-white whiteCard border border-primary" onClick="queueWhiteCard('${card._id}','${card.blankCard}')">
@@ -534,7 +534,7 @@ function getHand(){
                     </div>`;
             });
             $("#whiteHand").html(whiteHand);
-            if(result.data.mulligans > 0){
+            if(result.mulligans > 0){
                 $("#mulliganButton").removeClass('d-none');
             }
         }
@@ -547,14 +547,14 @@ function addToConsole(text){
 
 function getLatestRound(gameID){
     $.ajax({
-        url: `${CONFIG_BASEURL}/v1/games/getLatestRound`,
+        url: `${CONFIG_BASEURL}/games/getLatestRound`,
         method: "POST",
         data: {
             gameID: gameID
         },
         success: function( result ) {
-            doGameUpdate(result.data);
-            //console.log(result.data);
+            doGameUpdate(result);
+            //console.log(result);
         }
     });
 }
