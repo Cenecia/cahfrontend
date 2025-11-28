@@ -44,13 +44,13 @@
           url: "https://api.dencah.xyz/games/getAllCards",
           method: "GET",
           success: function( result ) {
-            result.data.whiteCardDeck.sort(compare);
-            result.data.blackCardDeck.sort(compare);
+            result.whiteCardDeck.sort(compare);
+            result.blackCardDeck.sort(compare);
 
             let setname = '';
-            let test = result.data.whiteCardDeck;
+            let test = result.whiteCardDeck;
 
-            for(const card of result.data.whiteCardDeck){
+            for(const card of result.whiteCardDeck){
               if(setname != card.set.name){
                 setname = card.set.name;
                 if(setname != ''){
@@ -65,7 +65,7 @@
             }
 
             setname = '';
-            for(const card of result.data.blackCardDeck){
+            for(const card of result.blackCardDeck){
               if(setname != card.set.name){
                 setname = card.set.name;
                 if(setname != ''){
