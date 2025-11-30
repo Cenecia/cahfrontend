@@ -1,8 +1,9 @@
 //set the base url for the various endpoints
 //all API calls will start with this URL, e.g., `${CONFIG_BASEURL}/games/getGame`
-//https://dencah-deviler151532041.codeanyapp.com
+//https://api.dencah.xyz
 //http://localhost:3000
-const CONFIG_BASEURL = "https://api.dencah.xyz";
+const local = false;
+const CONFIG_BASEURL = local ? "http://localhost:3000" : "https://api.dencah.xyz";
 
 $(document).ready(function(){
     try {
@@ -553,6 +554,7 @@ function getLatestRound(gameID){
             gameID: gameID
         },
         success: function( result ) {
+            updatePlayers(result.players, result.czar);
             doGameUpdate(result);
             //console.log(result);
         }
