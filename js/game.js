@@ -556,21 +556,18 @@ function getLatestRound(gameID){
         success: function( result ) {
             updatePlayers(result.players, result.czar);
             doGameUpdate(result);
-            //console.log("latest",result);
-            //console.log("left",result.game.timeLimit + result.timeLeft);
-            //console.log("left",msToMMSS(result.game.timeLimit + result.timeLeft));
-            var timeLeft = result.game.timeLimit + result.timeLeft;
+            var timeLeft = result.game.timeLimit - result.timeLeft;
             if(timeLeft < 10000){
                 $(".timeLeft").each(function(){
-                    $(this).html("<span class='badge badge-danger border'><i class='fas fa-hourglass-end'></i> "+msToMMSS(result.game.timeLimit + result.timeLeft)+"</span>");
+                    $(this).html("<span class='badge badge-danger border'><i class='fas fa-hourglass-end'></i> "+msToMMSS(timeLeft)+"</span>");
                 });
             } else if(timeLeft < 30000){
                 $(".timeLeft").each(function(){
-                    $(this).html("<span class='badge badge-warning border'><i class='fas fa-hourglass-half'></i> "+msToMMSS(result.game.timeLimit + result.timeLeft)+"</span>");
+                    $(this).html("<span class='badge badge-warning border'><i class='fas fa-hourglass-half'></i> "+msToMMSS(timeLeft)+"</span>");
                 });
             } else if(timeLeft >= 0) {
                 $(".timeLeft").each(function(){
-                    $(this).html("<span class='badge badge-success border'><i class='fas fa-hourglass-start'></i> "+msToMMSS(result.game.timeLimit + result.timeLeft)+"</span>");
+                    $(this).html("<span class='badge badge-success border'><i class='fas fa-hourglass-start'></i> "+msToMMSS(timeLeft)+"</span>");
                 });
             } else {
                 $(".timeLeft").each(function(){
