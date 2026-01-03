@@ -2,7 +2,7 @@
 //all API calls will start with this URL, e.g., `${CONFIG_BASEURL}/games/getGame`
 //https://api.dencah.xyz
 //http://localhost:3000
-const local = true;
+const local = false;
 const CONFIG_BASEURL = local ? "http://localhost:3000" : "https://api.dencah.xyz";
 
 $(document).ready(function(){
