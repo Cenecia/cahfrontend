@@ -2,7 +2,7 @@
 //all API calls will start with this URL, e.g., `${CONFIG_BASEURL}/games/getGame`
 //https://api.dencah.xyz
 //http://localhost:3000
-const local = false;
+const local = true;
 const CONFIG_BASEURL = local ? "http://localhost:3000" : "https://api.dencah.xyz";
 
 $(document).ready(function(){
@@ -556,7 +556,27 @@ function getLatestRound(gameID){
         success: function( result ) {
             updatePlayers(result.players, result.czar);
             doGameUpdate(result);
-            //console.log(result);
+            //console.log("latest",result);
+            //console.log("left",result.game.timeLimit + result.timeLeft);
+            //console.log("left",msToMMSS(result.game.timeLimit + result.timeLeft));
+            var timeLeft = result.game.timeLimit + result.timeLeft;
+            if(timeLeft < 10000){
+                $(".timeLeft").each(function(){
+                    $(this).html("<span class='badge badge-danger border'><i class='fas fa-hourglass-end'></i> "+msToMMSS(result.game.timeLimit + result.timeLeft)+"</span>");
+                });
+            } else if(timeLeft < 30000){
+                $(".timeLeft").each(function(){
+                    $(this).html("<span class='badge badge-warning border'><i class='fas fa-hourglass-half'></i> "+msToMMSS(result.game.timeLimit + result.timeLeft)+"</span>");
+                });
+            } else if(timeLeft >= 0) {
+                $(".timeLeft").each(function(){
+                    $(this).html("<span class='badge badge-success border'><i class='fas fa-hourglass-start'></i> "+msToMMSS(result.game.timeLimit + result.timeLeft)+"</span>");
+                });
+            } else {
+                $(".timeLeft").each(function(){
+                    $(this).html("<span class='badge badge-dark border'><i class='fas fa-hourglass-start'></i> -:-- </span>");
+                });
+            }
         }
     });
 }
@@ -860,4 +880,18 @@ function clearData()
     localStorage.removeItem("cahsubmitcards");
     localStorage.removeItem("cahgameover");
     localStorage.removeItem("cahczarselection");
+}
+
+function msToMMSS(ms) {
+  // 1. Calculate total seconds
+  const totalSeconds = Math.floor(ms / 1000);
+
+  // 2. Calculate minutes and remaining seconds
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  // 3. Format seconds to always have 2 digits (e.g., '05')
+  const formattedSeconds = seconds.toString().padStart(2, '0');
+
+  return `${minutes}:${formattedSeconds}`;
 }
